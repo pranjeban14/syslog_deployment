@@ -1,0 +1,13 @@
+---
+- name: Syslogs deployment using roles
+  hosts: localhost
+  connection: local
+  become: true
+  gather_facts: true
+  vars_files:
+    - ../vars/global_vars.yml
+
+  roles:
+    - keepalived
+    - rsyslog
+    - promtail

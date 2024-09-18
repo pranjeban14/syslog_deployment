@@ -1,0 +1,35 @@
+# Global Variables
+tenant_id: radiance
+product_id: radiance
+client_id: sjdflkskdjflk
+client_secret: ksdfkjsdf
+token_url: "https://token.url"
+vrrp_interface: eth0
+virtual_router_id: 51
+unicast_src_ip: 192.168.1.1
+unicast_peer_ip: 192.168.1.2
+priority: 101
+auth_pass: 1111
+virtual_ipaddress: 192.168.1.100
+node_name: zenl02rlc001
+region: asiapacific
+provider: onprem
+app_name: china-brands-syslogs-collector
+promtail_port: 9080  # Added promtail_port variable
+
+
+# # Edit these variables to match your environment
+# # VRRP Interface for Keepalived
+# vrrp_interface: eth0          # Your network interface
+# virtual_router_id: 51          # The router ID for VRRP
+
+# # IP addresses for Keepalived
+# unicast_src_ip: 192.168.1.1    # Primary server IP
+# unicast_peer_ip: 192.168.1.2   # Backup server IP
+# virtual_ipaddress: 192.168.1.100 # Virtual IP address
+
+# # Promtail settings
+# node_name: zenl02rlc001        # Name of your server node
+# region: asiapacific            # Deployment region
+# provider: onprem               # Cloud/on-prem provider
+# app_name: syslog-collector     # Application name

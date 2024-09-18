@@ -1,0 +1,28 @@
+---
+- name: Remove old Rsyslog configuration
+  file:
+    path: /etc/rsyslog.d/00-promtail-relay.conf
+    state: absent
+
+- name: Install Rsyslog (Debian)
+  apt:
+    name: rsyslog
+    state: present
+  when: ansible_os_family == "Debian"
+
+- name: Install Rsyslog (RedHat)
+  yum:
+    name: rsyslog
+    state: present
+  when: ansible_os_family == "RedHat"
+
+- name: Deploy Rsyslog configuration
+  template:
+    src: rsyslog-config.j2
+    dest: /etc/rsyslog.d/00-promtail-relay.conf
+
+- name: Deploy Rsyslog configuration file
+  template:
+    src: rsyslog-config.j2
+    dest: /etc/rsyslog.d/00-promtail-relay.conf
+  notify: Restart Rsyslog service

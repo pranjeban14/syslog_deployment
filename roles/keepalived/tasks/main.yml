@@ -1,0 +1,34 @@
+---
+- name: Remove old Keepalived configuration
+  file:
+    path: /etc/keepalived/keepalived.conf
+    state: absent
+
+- name: Install Keepalived (Debian)
+  apt:
+    name: keepalived
+    state: present
+  when: ansible_os_family == "Debian"
+
+- name: Install Keepalived (RedHat)
+  yum:
+    name: keepalived
+    state: present
+  when: ansible_os_family == "RedHat"
+
+- name: Deploy Keepalived configuration file
+  template:
+    src: keepalived.conf.j2
+    dest: /etc/keepalived/keepalived.conf
+
+- name: Deploy Keepalived configuration file
+  template:
+    src: keepalived.conf.j2
+    dest: /etc/keepalived/keepalived.conf
+  notify: Restart Keepalived service
+
+- name: Start and enable Keepalived service
+  systemd:
+    name: keepalived
+    enabled: yes
+    state: started
