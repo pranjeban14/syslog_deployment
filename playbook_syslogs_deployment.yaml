@@ -15,6 +15,13 @@
         msg: "This playbook must be run as root. Please run with sudo or as root user."
       when: user_check.stdout != 'root'
 
+  # - name: Ensure the host key is in the known_hosts file
+  # ansible.builtin.known_hosts:
+  #   path: ~/.ssh/known_hosts
+  #   name: "{{ inventory_hostname }}"
+  #   key: "{{ hostvars[inventory_hostname]['ansible_ssh_host_key'] }}"
+
+
 - name: Install and configure Promtail, Rsyslog, and Keepalived
   hosts: all
   become: true
