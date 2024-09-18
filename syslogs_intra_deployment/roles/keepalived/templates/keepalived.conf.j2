@@ -1,0 +1,32 @@
+vrrp_instance VI_1 {
+    state MASTER
+    interface {{ vrrp_interface }}
+    virtual_router_id {{ virtual_router_id }}
+    unicast_src_ip {{ unicast_src_ip }}
+    unicast_peer {
+        {{ unicast_peer_ip }}
+    }
+    priority {{ priority }}
+    advert_int 1
+    authentication {
+        auth_type PASS
+        auth_pass {{ auth_pass }}
+    }
+    virtual_ipaddress {
+        {{ virtual_ipaddress }} dev {{ vrrp_interface }}
+    }
+}
+
+virtual_server {{ unicast_src_ip }} 514 {
+    delay_loop 60
+    lb_algo rr
+    lb_kind DR
+    protocol UDP
+    persistence_timeout 60
+    real_server {{ unicast_src_ip }} {{ promtail_port }} {
+        weight 100
+        TCP_CHECK {
+            connect_timeout 6
+        }
+    }
+}
