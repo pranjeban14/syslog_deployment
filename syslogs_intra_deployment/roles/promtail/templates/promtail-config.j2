@@ -1,0 +1,39 @@
+server:
+  http_listen_port: 9080
+  log_format: logfmt
+  grpc_listen_port: 0
+
+positions:
+  filename: /tmp/positions.yaml
+
+clients:
+  - url: https://telemetry.pensieve.maersk-digital.net/loki/api/v1/push
+    tenant_id: {{ tenant_id }}
+    external_labels:
+      region: {{ region }}
+      product_id: {{ product_id }}
+      provider: {{ provider }}
+      env: prod
+      app: {{ app_name }}
+      node_name: {{ node_name }}
+    oauth2:
+      client_id: {{ client_id }}
+      client_secret: {{ client_secret }}
+      token_url: {{ token_url }}
+      scopes: ["api://ingestion.pensieve/.default"]
+
+scrape_configs:
+  - job_name: syslog
+    syslog:
+      listen_address: 0.0.0.0:1514
+      idle_timeout: 1h
+      label_structured_data: true
+      use_incoming_timestamp: true
+      labels:
+        component: "syslog-collector"
+    pipeline_stages:
+      - regex:
+          expression: 'msg (?P<severity>\d+): <187>(?P<msgid>\d+): (?P<hostname>\S+) (\w{3} \d{2} \d{2}:\d{2}:\d{2}): (?P<message>.*)'
+    relabel_configs:
+      - source_labels: [__syslog_message_hostname]
+        target_label: instance

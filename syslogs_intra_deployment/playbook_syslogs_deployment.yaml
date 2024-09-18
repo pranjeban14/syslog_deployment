@@ -1,0 +1,34 @@
+- name: Ensure Ansible is run with root privileges
+  hosts: localhost
+  become: true
+  gather_facts: true
+  tasks:
+    - name: Check for root access
+      command: whoami
+      register: user_check
+      changed_when: false
+      failed_when: user_check.stdout != 'root'
+      ignore_errors: yes
+
+    - name: Fail if not run as root
+      fail:
+        msg: "This playbook must be run as root. Please run with sudo or as root user."
+      when: user_check.stdout != 'root'
+
+  # - name: Ensure the host key is in the known_hosts file
+  # ansible.builtin.known_hosts:
+  #   path: ~/.ssh/known_hosts
+  #   name: "{{ inventory_hostname }}"
+  #   key: "{{ hostvars[inventory_hostname]['ansible_ssh_host_key'] }}"
+
+
+- name: Install and configure Promtail, Rsyslog, and Keepalived
+  hosts: all
+  become: true
+  gather_facts: true
+  vars_files:
+    - vars/global_vars.yml
+  roles:
+    - promtail
+    - rsyslog
+    - keepalived

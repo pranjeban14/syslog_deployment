@@ -1,0 +1,5 @@
+- name: Restart Rsyslog service
+  systemd:
+    name: rsyslog
+    state: restarted
+    enabled: yes  # Ensures the service is enabled on boot
