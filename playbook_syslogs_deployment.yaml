@@ -1,13 +1,26 @@
----
-- name: Syslogs deployment using roles
+- name: Ensure Ansible is run with root privileges
   hosts: localhost
-  connection: local
+  gather_facts: false
+  tasks:
+    - name: Check for root access
+      command: whoami
+      register: user_check
+      changed_when: false
+      failed_when: user_check.stdout != 'root'
+      ignore_errors: yes
+
+    - name: Fail if not run as root
+      fail:
+        msg: "This playbook must be run as root. Please run with sudo or as root user."
+      when: user_check.stdout != 'root'
+
+- name: Install and configure Promtail, Rsyslog, and Keepalived
+  hosts: all
   become: true
   gather_facts: true
   vars_files:
-    - ../vars/global_vars.yml
-
+    - vars/global_vars.yml
   roles:
-    - keepalived
-    - rsyslog
     - promtail
+    - rsyslog
+    - keepalived

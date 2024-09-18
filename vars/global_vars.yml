@@ -6,9 +6,9 @@ client_secret: ksdfkjsdf
 token_url: "https://token.url"
 vrrp_interface: eth0
 virtual_router_id: 51
-unicast_src_ip: 192.168.1.1
-unicast_peer_ip: 192.168.1.2
-priority: 101
+priority: "{{ '101' if inventory_hostname in groups['primary'] else '50' }}"
+unicast_src_ip: "{{ ansible_host }}"
+unicast_peer_ip: "{{ groups['primary'][0] if inventory_hostname in groups['secondary'] else groups['secondary'][0] }}"
 auth_pass: 1111
 virtual_ipaddress: 192.168.1.100
 node_name: zenl02rlc001
@@ -16,6 +16,8 @@ region: asiapacific
 provider: onprem
 app_name: china-brands-syslogs-collector
 promtail_port: 9080  # Added promtail_port variable
+# global_vars.yml
+
 
 
 # # Edit these variables to match your environment
