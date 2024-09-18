@@ -1,5 +1,6 @@
 - name: Ensure Ansible is run with root privileges
   hosts: localhost
+  become: true
   gather_facts: false
   tasks:
     - name: Check for root access
